@@ -1,0 +1,21 @@
+<!--
+=====================================================================
+pendiente.html  —  PÁGINA TEMPORAL
+---------------------------------------------------------------------
+Se muestra mientras una funcionalidad todavía no está programada.
+Cada dueño la va a reemplazar por la página real de su funcionalidad.
+IMPORTANTE: esta página NO debe quedar en la entrega final.
+
+ENTRADAS:  "titulo" -> nombre de la funcionalidad, enviado desde app.py.
+SALIDAS:   una página con el título y el aviso "en construcción".
+RESTRICCIONES:  es temporal; cada dueño la reemplaza por su página real.
+=====================================================================
+-->
+{% extends "base.html" %}               <!-- Usamos el molde base.html -->
+
+{% block titulo %}{{ titulo }}{% endblock %}  <!-- El título llega desde app.py -->
+
+{% block contenido %}
+    <h1>{{ titulo }}</h1>                <!-- Mostramos el nombre de la funcionalidad -->
+    <p>Esta funcionalidad está en construcción.</p>  <!-- Aviso temporal -->
+{% endblock %}

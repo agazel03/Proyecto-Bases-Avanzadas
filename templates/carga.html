@@ -1,0 +1,35 @@
+<!--
+=====================================================================
+carga.html  —  F1 CARGA INICIAL DE DATOS (Paz)
+---------------------------------------------------------------------
+Formulario para escoger el archivo JSON con el catálogo de eventos y
+enviarlo para cargarlo en MongoDB.
+
+ENTRADAS:  ninguna variable desde app.py (solo los mensajes flash del molde).
+SALIDAS:   envía el archivo a /carga con el método POST.
+RESTRICCIONES:
+  - enctype="multipart/form-data" es OBLIGATORIO para poder enviar archivos.
+  - accept=".json" hace que el explorador de archivos muestre solo .json
+    (igual se valida en Python, porque esto se puede saltar).
+=====================================================================
+-->
+{% extends "base.html" %}                 <!-- Usamos el molde base.html -->
+
+{% block titulo %}Carga inicial{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Carga inicial de datos</h1>        <!-- Título de la página -->
+    <!-- Instrucción para el usuario -->
+    <p>Seleccione el archivo JSON con el catálogo de eventos para cargarlo en MongoDB.</p>
+
+    <!-- Formulario:
+         action  -> a qué dirección se envía (la misma ruta /carga)
+         method  -> POST, porque estamos ENVIANDO datos
+         enctype -> necesario para enviar archivos -->
+    <form action="{{ url_for('carga_inicial') }}" method="POST" enctype="multipart/form-data">
+        <label for="archivo">Archivo de eventos (.json)</label>   <!-- Texto del campo -->
+        <!-- Campo para escoger el archivo. name="archivo" es el nombre que lee Python. -->
+        <input type="file" id="archivo" name="archivo" accept=".json" required>
+        <button type="submit">Cargar datos</button>               <!-- Botón para enviar -->
+    </form>
+{% endblock %}

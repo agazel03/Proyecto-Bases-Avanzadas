@@ -1,0 +1,46 @@
+<!--
+=====================================================================
+preventas.html  —  PÁGINA PRINCIPAL = F3 PREVENTAS ABIERTAS (Rachel)
+---------------------------------------------------------------------
+Es lo primero que ve el cliente al abrir la app: una tarjeta por cada
+preventa vigente, con nombre del evento, categoría, entradas
+disponibles y tiempo restante (estos dos últimos vienen de Redis).
+
+Desde app.py se le debe enviar una lista llamada "preventas", donde
+cada preventa tiene: id, nombre, categoria, disponibles, minutos.
+Mientras Rachel programa la lógica, la lista llega vacía y se muestra
+el mensaje de "no hay preventas abiertas".
+
+ENTRADAS:  "preventas" -> lista enviada desde app.py.
+SALIDAS:   una tarjeta por preventa, o el mensaje de lista vacía.
+RESTRICCIONES:
+  - Si la categoría no tiene color definido en estilo.css, se ve gris.
+  - Nunca mostrar los datos en formato JSON (lo prohíbe el enunciado).
+=====================================================================
+-->
+{% extends "base.html" %}               <!-- Usamos el molde base.html -->
+
+{% block titulo %}Preventas abiertas{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Preventas abiertas</h1>          <!-- Título principal de la página -->
+
+    {% if preventas %}                   <!-- Si la lista tiene al menos una preventa... -->
+        <div class="tarjetas">           <!-- Cuadrícula de tarjetas -->
+            {% for p in preventas %}     <!-- Recorremos cada preventa de la lista -->
+                <div class="tarjeta">
+                    <!-- Etiqueta de categoría. La clase cambia el color según la categoría,
+                         por ejemplo "cat-conciertos". |lower la pasa a minúscula. -->
+                    <span class="etiqueta cat-{{ p.categoria|lower }}">{{ p.categoria }}</span>
+                    <h3>{{ p.nombre }}</h3>                                 <!-- Nombre del evento -->
+                    <p>{{ p.disponibles }} entradas disponibles</p>         <!-- Dato de Redis -->
+                    <p class="tiempo">Vence en {{ p.minutos }} minutos</p>  <!-- Dato de Redis (TTL) -->
+                    <!-- Botón que lleva a obtener una entrada de este evento (F4) -->
+                    <a class="boton" href="{{ url_for('obtener_entrada') }}">Obtener entrada</a>
+                </div>
+            {% endfor %}                 <!-- Fin del recorrido -->
+        </div>
+    {% else %}                           <!-- Si la lista está vacía... -->
+        <p class="vacio">No hay preventas abiertas en este momento.</p>
+    {% endif %}                          <!-- Fin de la condición -->
+{% endblock %}
