@@ -39,7 +39,7 @@ from db import probar_conexiones
 # Importamos la logica de cada funcionalidad (cada una vive en su propio archivo).
 from f1_carga import cargar_eventos                            # F1 (Paz)
 from f2_abrir_preventa import obtener_catalogo, abrir_preventa as abrir_preventa_redis  # F2 (Paz)
-from f4_obtener_entrada import obtener_entrada_bd, obtenerPreventasAbiertas  # F4 (Angel)
+from f4_obtener_entrada import  obtenerPreventasAbiertas , obtenerEntrada as obtener_entrada_bd  # F4 (Angel)
 # Nota: a la funcion de F2 le ponemos otro nombre ("abrir_preventa_redis")
 # para que no se confunda con la ruta abrir_preventa() de mas abajo.
 
