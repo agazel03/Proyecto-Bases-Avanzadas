@@ -180,8 +180,8 @@ def abrir_preventa():
 
 
 # F4 - Obtener una entrada (dueno: Angel)
-@app.route("/obtenerEntrada")       # direccion: http://localhost:5000/obtener-entrada
-def obtenerEntrada():
+@app.route("/obtener-entrada", methods=["GET", "POST"])       # direccion: http://localhost:5000/obtener-entrada
+def obtener_entrada():
     """
     QUE HACE (F4):
         Muestra el formulario donde el cliente escribe su nombre y escoge
@@ -217,7 +217,7 @@ def obtenerEntrada():
             flash(str(error), "error")
 
         # Volvemos con GET (igual que en F1 y F2), dejando el nombre escrito.
-        return redirect(url_for("obtenerEntrada", cliente=cliente.strip()))
+        return redirect(url_for("obtener_entradas", cliente=cliente.strip()))
 
     # Si solo entro a la pagina (GET), traemos las preventas abiertas y la mostramos.
     preventas = obtenerPreventasAbiertas()
