@@ -1,0 +1,24 @@
+# =====================================================================
+# docker-compose.yml
+# ---------------------------------------------------------------------
+# Enciende MongoDB y Redis con UN solo comando:  docker compose up -d
+# Así los 3 tenemos exactamente las mismas versiones y configuración.
+# (Opcional: también se pueden instalar Mongo y Redis por separado.)
+# =====================================================================
+services:                       # Lista de programas (servicios) a encender
+  mongo:                        # Servicio 1: MongoDB
+    image: mongo:7              # Usa la imagen oficial de MongoDB versión 7
+    container_name: mongo       # Nombre del contenedor (para reconocerlo en Docker Desktop)
+    ports:
+      - "27017:27017"           # Abre el puerto 27017 para que la app se conecte
+    volumes:
+      - datos_mongo:/data/db    # Guarda los datos aunque se apague el contenedor
+
+  redis:                        # Servicio 2: Redis
+    image: redis:7              # Usa la imagen oficial de Redis versión 7
+    container_name: redis       # Nombre del contenedor
+    ports:
+      - "6379:6379"             # Abre el puerto 6379 para que la app se conecte
+
+volumes:
+  datos_mongo:                  # Espacio de almacenamiento para los datos de Mongo

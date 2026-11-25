@@ -1,0 +1,43 @@
+[
+  {
+    "id": "E001",
+    "nombre": "Concierto Sinfónica Nacional",
+    "categoria": "Conciertos",
+    "precio": 15000,
+    "artista": "Orquesta Sinfónica Nacional",
+    "genero_musical": "Clásica"
+  },
+  {
+    "id": "E002",
+    "nombre": "Saprissa vs. Alajuelense",
+    "categoria": "Deportes",
+    "precio": 12000,
+    "equipos": ["Saprissa", "Alajuelense"],
+    "estadio": "Estadio Ricardo Saprissa"
+  },
+  {
+    "id": "E003",
+    "nombre": "La casa de Bernarda Alba",
+    "categoria": "Teatro",
+    "precio": 8000,
+    "director": "Marta Rojas",
+    "duracion_minutos": 110
+  },
+  {
+    "id": "E004",
+    "nombre": "Congreso de Innovación Digital",
+    "categoria": "Conferencias",
+    "precio": 25000,
+    "expositores": ["Laura Méndez", "Carlos Vega"],
+    "modalidad": "Presencial"
+  },
+  {
+    "id": "E005",
+    "nombre": "Herediano vs. Cartaginés",
+    "categoria": "Deportes",
+    "precio": 10000,
+    "equipos": ["Herediano", "Cartaginés"],
+    "estadio": "Estadio Eladio Rosabal Cordero",
+    "zonas": ["Sol", "Sombra", "Preferencial"]
+  }
+]

@@ -1,0 +1,245 @@
+/* =====================================================================
+   estilo.css  —  HOJA DE ESTILOS (la "decoración" de la app)
+   ---------------------------------------------------------------------
+   Aquí se definen colores, letras, espacios y bordes.
+   No cambia lo que la app HACE, solo cómo SE VE.
+   La interfaz vale 5 puntos: "ordenada y clara".
+
+   ENTRADAS:  las clases que usan los HTML (ej. class="tarjeta").
+   SALIDAS:   la apariencia visual de la página.
+   RESTRICCIONES: si en un HTML se usa una clase que no existe aquí,
+   simplemente no tiene estilo (no da error).
+   ===================================================================== */
+
+/* --- Estilos generales de toda la página --- */
+body {
+    margin: 0;                              /* Quita el borde blanco que el navegador pone por defecto */
+    font-family: "Segoe UI", Arial, sans-serif; /* Tipo de letra (si no existe la primera, usa la siguiente) */
+    background: #f4f5f7;                    /* Color de fondo gris muy claro */
+    color: #222;                            /* Color del texto: casi negro */
+}
+
+/* --- Franja superior (encabezado) --- */
+.encabezado {
+    background: #2b2d42;                    /* Fondo azul oscuro */
+    padding: 14px 32px;                     /* Espacio interno: 14px arriba/abajo, 32px a los lados */
+    display: flex;                          /* Pone el logo y el menú en una misma fila */
+    align-items: center;                    /* Los centra verticalmente */
+    justify-content: space-between;         /* Logo a la izquierda, menú a la derecha */
+    flex-wrap: wrap;                        /* Si no caben, el menú baja a otra línea */
+}
+
+/* --- Nombre de la app en el encabezado --- */
+.logo {
+    color: #fff;                            /* Texto blanco */
+    font-size: 20px;                        /* Letra más grande */
+    font-weight: bold;                      /* Negrita */
+    text-decoration: none;                  /* Quita el subrayado de enlace */
+}
+
+/* --- Enlaces del menú --- */
+.menu a {
+    color: #edf2f4;                         /* Texto blanco suave */
+    text-decoration: none;                  /* Sin subrayado */
+    margin-left: 20px;                      /* Separación entre un enlace y otro */
+    font-size: 15px;                        /* Tamaño de letra */
+}
+
+/* --- Enlace del menú cuando el mouse pasa encima --- */
+.menu a:hover {
+    color: #ffb703;                         /* Cambia a amarillo para indicar que se puede hacer clic */
+}
+
+/* --- Zona central donde va el contenido --- */
+.contenedor {
+    max-width: 1000px;                      /* Ancho máximo para que no se estire demasiado */
+    margin: 32px auto;                      /* 32px arriba/abajo y centrado horizontalmente */
+    padding: 0 20px;                        /* Espacio a los lados en pantallas pequeñas */
+}
+
+/* --- Cuadrícula de tarjetas de la página de inicio --- */
+.tarjetas {
+    display: grid;                          /* Acomoda los elementos en cuadrícula */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Tantas columnas como quepan, mínimo 260px cada una */
+    gap: 16px;                              /* Espacio entre tarjetas */
+}
+
+/* --- Cada tarjeta --- */
+.tarjeta {
+    background: #fff;                       /* Fondo blanco */
+    border-radius: 10px;                    /* Esquinas redondeadas */
+    padding: 18px;                          /* Espacio interno */
+    text-decoration: none;                  /* Sin subrayado (la tarjeta es un enlace) */
+    color: inherit;                         /* Usa el mismo color de texto que el resto */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* Sombra suave para que "flote" */
+}
+
+/* --- Tarjeta cuando el mouse pasa encima --- */
+.tarjeta:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Sombra más marcada */
+}
+
+/* --- Título dentro de cada tarjeta --- */
+.tarjeta h3 {
+    margin-top: 0;                          /* Quita el espacio de arriba del título */
+    color: #2b2d42;                         /* Mismo azul oscuro del encabezado */
+}
+
+/* --- Tablas (las usarán F3 y F5 para mostrar resultados) --- */
+table {
+    width: 100%;                            /* La tabla ocupa todo el ancho disponible */
+    border-collapse: collapse;              /* Une los bordes de las celdas en una sola línea */
+    background: #fff;                       /* Fondo blanco */
+}
+th, td {
+    padding: 10px 12px;                     /* Espacio dentro de cada celda */
+    border-bottom: 1px solid #ddd;          /* Línea gris debajo de cada fila */
+    text-align: left;                       /* Texto alineado a la izquierda */
+}
+th {
+    background: #2b2d42;                    /* Encabezado de tabla azul oscuro */
+    color: #fff;                            /* Texto blanco */
+}
+
+/* --- Formularios (los usarán F1, F2 y F4) --- */
+form {
+    background: #fff;                       /* Fondo blanco */
+    padding: 20px;                          /* Espacio interno */
+    border-radius: 10px;                    /* Esquinas redondeadas */
+    max-width: 500px;                       /* Que no sea demasiado ancho */
+}
+label {
+    display: block;                         /* Cada etiqueta en su propia línea */
+    margin: 12px 0 4px;                     /* Espacio arriba y abajo */
+    font-weight: bold;                      /* Negrita */
+}
+input, select {
+    width: 100%;                            /* Los campos ocupan todo el ancho del formulario */
+    padding: 8px;                           /* Espacio interno */
+    box-sizing: border-box;                 /* El ancho incluye el padding (para que no se salgan) */
+}
+button {
+    margin-top: 16px;                       /* Separación del último campo */
+    background: #2b2d42;                    /* Fondo azul oscuro */
+    color: #fff;                            /* Texto blanco */
+    border: none;                           /* Sin borde */
+    padding: 10px 20px;                     /* Espacio interno */
+    border-radius: 6px;                     /* Esquinas redondeadas */
+    cursor: pointer;                        /* Manita al pasar el mouse */
+}
+
+/* --- Mensajes de éxito y de error --- */
+.mensaje {
+    padding: 12px 16px;                     /* Espacio interno */
+    border-radius: 6px;                     /* Esquinas redondeadas */
+    margin-bottom: 16px;                    /* Separación con lo que sigue */
+}
+.mensaje.exito {
+    background: #d8f3dc;                    /* Fondo verde claro */
+    color: #1b4332;                         /* Texto verde oscuro */
+}
+.mensaje.error {
+    background: #ffe5e5;                    /* Fondo rojo claro */
+    color: #8b0000;                         /* Texto rojo oscuro */
+}
+
+/* =====================================================================
+   PÁGINA Y PIE DE PÁGINA
+   ===================================================================== */
+
+/* Hace que el pie de página quede siempre abajo, aunque haya poco contenido */
+body {
+    min-height: 100vh;                      /* La página mide al menos lo alto de la pantalla */
+    display: flex;                          /* Acomoda encabezado, contenido y pie en columna */
+    flex-direction: column;                 /* Uno debajo del otro */
+}
+.contenedor {
+    flex: 1;                                /* El contenido "empuja" el pie hacia abajo */
+    width: 100%;                            /* Ocupa todo el ancho disponible (hasta el máximo) */
+    box-sizing: border-box;                 /* El ancho incluye el padding */
+}
+
+/* --- Pie de página (footer) --- */
+.pie {
+    background: #2b2d42;                    /* Mismo azul oscuro del encabezado */
+    color: #edf2f4;                         /* Texto blanco suave */
+    padding: 28px 32px;                     /* Espacio interno */
+    margin-top: 40px;                       /* Separación con el contenido */
+}
+.pie-columnas {
+    max-width: 1000px;                      /* Mismo ancho máximo que el contenido */
+    margin: 0 auto;                         /* Centrado */
+    display: grid;                          /* Columnas en cuadrícula */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Tantas columnas como quepan */
+    gap: 24px;                              /* Espacio entre columnas */
+}
+.pie h4 {
+    margin: 0 0 10px;                       /* Espacio debajo del título de cada columna */
+    color: #ffb703;                         /* Títulos en amarillo para destacar */
+}
+.pie p {
+    margin: 4px 0;                          /* Poco espacio entre líneas */
+    font-size: 14px;                        /* Letra un poco más pequeña */
+}
+.pie a {
+    display: block;                         /* Cada enlace en su propia línea */
+    color: #edf2f4;                         /* Texto blanco suave */
+    text-decoration: none;                  /* Sin subrayado */
+    margin: 6px 0;                          /* Espacio entre enlaces */
+    font-size: 14px;                        /* Tamaño de letra */
+}
+.pie a:hover {
+    color: #ffb703;                         /* Amarillo al pasar el mouse */
+}
+
+/* =====================================================================
+   TARJETAS DE PREVENTAS (página principal)
+   ===================================================================== */
+
+/* Etiqueta de categoría (la "pastilla" de color) */
+.etiqueta {
+    display: inline-block;                  /* Se ajusta al tamaño del texto */
+    font-size: 12px;                        /* Letra pequeña */
+    padding: 3px 10px;                      /* Espacio interno */
+    border-radius: 20px;                    /* Forma de pastilla */
+    background: #e9ecef;                    /* Gris: color por defecto si la categoría es nueva */
+    color: #343a40;                         /* Texto gris oscuro */
+}
+/* Un color por categoría del archivo eventos.json.
+   Si llega una categoría nueva, usa el gris de arriba. */
+.cat-conciertos   { background: #ede7f6; color: #4527a0; }  /* Morado */
+.cat-deportes     { background: #e8f5e9; color: #1b5e20; }  /* Verde */
+.cat-teatro       { background: #fdecea; color: #8e2a2a; }  /* Rojo */
+.cat-conferencias { background: #e3f2fd; color: #0d47a1; }  /* Azul */
+.cat-festivales   { background: #fff8e1; color: #7a5200; }  /* Amarillo */
+
+/* Texto del tiempo restante */
+.tiempo {
+    color: #8b0000;                         /* Rojo oscuro: transmite urgencia */
+    font-weight: bold;                      /* Negrita */
+}
+
+/* Botón dentro de las tarjetas (es un enlace con forma de botón) */
+.boton {
+    display: inline-block;                  /* Se comporta como botón */
+    margin-top: 8px;                        /* Separación del texto de arriba */
+    background: #2b2d42;                    /* Azul oscuro */
+    color: #fff;                            /* Texto blanco */
+    padding: 8px 16px;                      /* Espacio interno */
+    border-radius: 6px;                     /* Esquinas redondeadas */
+    text-decoration: none;                  /* Sin subrayado */
+    font-size: 14px;                        /* Tamaño de letra */
+}
+.boton:hover {
+    background: #ffb703;                    /* Amarillo al pasar el mouse */
+    color: #2b2d42;                         /* Texto azul oscuro */
+}
+
+/* Mensaje cuando no hay preventas abiertas */
+.vacio {
+    background: #fff;                       /* Fondo blanco */
+    padding: 24px;                          /* Espacio interno */
+    border-radius: 10px;                    /* Esquinas redondeadas */
+    text-align: center;                     /* Texto centrado */
+    color: #6c757d;                         /* Gris */
+}

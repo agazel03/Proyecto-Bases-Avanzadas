@@ -1,0 +1,59 @@
+<!--
+=====================================================================
+abrir_preventa.html  —  F2 ABRIR UNA PREVENTA (Paz)
+---------------------------------------------------------------------
+El administrador escoge un evento del catálogo, indica la cantidad
+de entradas y la duración en minutos, y abre la preventa.
+
+ENTRADAS:  "catalogo" -> lista de eventos enviada desde app.py
+           (cada uno con id, nombre, categoria y precio).
+SALIDAS:   envía "evento", "cantidad" y "minutos" a /abrir-preventa (POST).
+RESTRICCIONES:
+  - Si el catálogo está vacío, se muestra un aviso para hacer primero la F1.
+  - min="1" evita números menores que 1 en el navegador, pero igual
+    se valida en Python (esto se puede saltar).
+=====================================================================
+-->
+{% extends "base.html" %}                     <!-- Usamos el molde base.html -->
+
+{% block titulo %}Abrir preventa{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Abrir una preventa</h1>                <!-- Título de la página -->
+
+    {% if catalogo %}                          <!-- Si hay eventos en el catálogo... -->
+        <!-- Formulario que envía los datos a la misma ruta con POST -->
+        <form action="{{ url_for('abrir_preventa') }}" method="POST">
+
+            <label for="evento">Evento</label>   <!-- Texto del campo -->
+            <!-- Lista desplegable con los eventos. name="evento" es el nombre que lee Python. -->
+            <select id="evento" name="evento" required>
+                <!-- Primera opción vacía para obligar a escoger -->
+                <option value="">Seleccione un evento</option>
+                {% for e in catalogo %}            <!-- Una opción por cada evento -->
+                    <!-- value = lo que se envía (el id); el texto es lo que ve el usuario.
+                         "{:,}".format(e.precio) pone separador de miles: 15000 -> 15,000 -->
+                    <option value="{{ e.id }}">
+                        {{ e.nombre }} — {{ e.categoria }} — ₡{{ "{:,}".format(e.precio) }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="cantidad">Cantidad de entradas</label>
+            <!-- Campo numérico: solo enteros (step="1") desde 1 -->
+            <input type="number" id="cantidad" name="cantidad" min="1" step="1" required>
+
+            <label for="minutos">Duración de la preventa (minutos)</label>
+            <!-- Campo numérico para los minutos que durará la preventa -->
+            <input type="number" id="minutos" name="minutos" min="1" step="1" required>
+
+            <button type="submit">Abrir preventa</button>   <!-- Botón para enviar -->
+        </form>
+    {% else %}                                 <!-- Si el catálogo está vacío... -->
+        <!-- Aviso con enlace a la carga inicial (F1) -->
+        <p class="vacio">
+            El catálogo está vacío. Primero haga la
+            <a href="{{ url_for('carga_inicial') }}">carga inicial de datos</a>.
+        </p>
+    {% endif %}
+{% endblock %}

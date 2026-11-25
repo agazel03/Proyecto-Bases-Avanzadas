@@ -1,0 +1,94 @@
+<!--
+=====================================================================
+base.html  —  PLANTILLA BASE (el "molde" de todas las páginas)
+---------------------------------------------------------------------
+Todas las páginas de la app usan este molde. Tiene 3 partes fijas:
+  1. ENCABEZADO (arriba): nombre de la app y menú del CLIENTE.
+  2. CONTENIDO (centro): cada página rellena este espacio.
+  3. PIE DE PÁGINA (abajo): la zona de ADMINISTRACIÓN y los datos
+     del proyecto, como el "footer" de cualquier sitio web.
+Si cambiamos algo aquí, cambia en TODAS las páginas.
+
+ENTRADAS:  los mensajes guardados con flash() y el contenido de cada página.
+SALIDAS:   la página completa (encabezado + contenido + pie) en el navegador.
+RESTRICCIONES:
+  - Cada enlace usa url_for('nombre_de_funcion'): si se cambia el nombre
+    de una función en app.py, hay que cambiarlo aquí también.
+  - El enlace "Administración" es solo navegación (sin usuario ni
+    contraseña), porque un login sería una funcionalidad extra.
+=====================================================================
+-->
+<!DOCTYPE html>                     <!-- Le dice al navegador que esto es una página HTML moderna -->
+<html lang="es">                    <!-- Inicio de la página; el idioma es español -->
+<head>                              <!-- Cabecera: información de la página que no se ve directamente -->
+    <meta charset="UTF-8">          <!-- Permite mostrar tildes y ñ correctamente -->
+    <!-- Hace que la página se adapte bien a pantallas de distintos tamaños -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la pestaña del navegador. El "block titulo" es un espacio que cada página puede cambiar. -->
+    <title>{% block titulo %}Preventas de Eventos{% endblock %}</title>
+    <!-- Conectamos la hoja de estilos. url_for('static', ...) busca el archivo en la carpeta "static". -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>                              <!-- Cuerpo: todo lo que sí se ve en pantalla -->
+
+    <!-- ===== 1. ENCABEZADO: lo que usa el CLIENTE ===== -->
+    <header class="encabezado">
+        <!-- Nombre de la app; al hacerle clic vuelve a la página principal -->
+        <a class="logo" href="{{ url_for('preventas_abiertas') }}">🎟️ Preventas de Eventos</a>
+        <nav class="menu">          <!-- Menú del cliente: solo sus dos funcionalidades -->
+            <!-- url_for('nombre_funcion') genera la dirección de cada ruta definida en app.py -->
+            <a href="{{ url_for('preventas_abiertas') }}">Preventas abiertas</a>
+            <a href="{{ url_for('obtener_entrada') }}">Obtener entrada</a>
+        </nav>
+    </header>
+
+    <!-- ===== 2. CONTENIDO CENTRAL ===== -->
+    <main class="contenedor">
+
+        <!-- MENSAJES DE ÉXITO O ERROR.
+             En Python se guardan con flash("texto", "exito") o flash("texto", "error")
+             y aquí se muestran. Ej.: "Cliente ya tiene una entrada de este evento". -->
+        {% with mensajes = get_flashed_messages(with_categories=true) %}  <!-- Recogemos los mensajes pendientes -->
+            {% for tipo, texto in mensajes %}                            <!-- Recorremos cada mensaje -->
+                <!-- "tipo" es "exito" (verde) o "error" (rojo), según el CSS -->
+                <div class="mensaje {{ tipo }}">{{ texto }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Espacio que cada página rellena con su propio contenido -->
+        {% block contenido %}{% endblock %}
+    </main>
+
+    <!-- ===== 3. PIE DE PÁGINA: ADMINISTRACIÓN + DATOS DEL PROYECTO ===== -->
+    <footer class="pie">
+        <div class="pie-columnas">      <!-- Contenedor que pone las columnas una al lado de la otra -->
+
+            <!-- Columna 1: zona de administración (la usa la persona que administra) -->
+            <div>
+                <h4>Administración</h4>
+                <!-- Enlaces a las funcionalidades del administrador -->
+                <a href="{{ url_for('carga_inicial') }}">Carga inicial de datos</a>
+                <a href="{{ url_for('abrir_preventa') }}">Abrir preventa</a>
+                <a href="{{ url_for('consultar_entradas') }}">Consultar entradas</a>
+            </div>
+
+            <!-- Columna 2: datos del curso -->
+            <div>
+                <h4>Proyecto</h4>
+                <p>TI4601 Bases de Datos Avanzadas</p>
+                <p>Grupo 02 · II semestre 2026</p>
+                <p>Tecnológico de Costa Rica</p>
+            </div>
+
+            <!-- Columna 3: integrantes del equipo -->
+            <div>
+                <h4>Equipo</h4>
+                <p>Paz Bloise</p>
+                <p>Angel Gazel</p>
+                <p>Rachel Rojas</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
