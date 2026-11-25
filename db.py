@@ -107,8 +107,8 @@ def probar_conexiones():
         Ninguna.
     SALIDAS:
         No devuelve nada (None). Solo imprime en la terminal:
-          "✔ ... conectado correctamente"  si la base respondió, o
-          "✘ No se pudo conectar a ...: <error>"  si no respondió.
+          "... conectado correctamente"  si la base respondió, o
+          "No se pudo conectar a ...: <error>"  si no respondió.
     RESTRICCIONES:
         - Espera como máximo 3 segundos por cada base de datos.
         - Si una base falla, NO detiene la app: solo avisa.
@@ -119,10 +119,10 @@ def probar_conexiones():
         # Si responde, la conexión funciona.
         cliente_mongo.admin.command("ping")
         # Si llegamos a esta línea, Mongo respondió bien.
-        print("✔ MongoDB conectado correctamente")
+        print(" MongoDB conectado correctamente")
     except Exception as error:
         # Si Mongo no respondió, mostramos el problema en la terminal.
-        print("✘ No se pudo conectar a MongoDB:", error)
+        print("No se pudo conectar a MongoDB:", error)
 
     # --- Prueba de Redis ---
     try:
@@ -132,4 +132,4 @@ def probar_conexiones():
         print("✔ Redis conectado correctamente")
     except Exception as error:
         # Si Redis no respondió, mostramos el problema en la terminal.
-        print("✘ No se pudo conectar a Redis:", error)
+        print(" No se pudo conectar a Redis:", error)
