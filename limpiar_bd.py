@@ -40,7 +40,7 @@ if respuesta.strip().lower() == "s":
     borrados_entradas = coleccion_entradas.delete_many({}).deleted_count
 
     # Mostramos cuántos documentos se borraron de cada colección.
-    print(f"✔ Mongo: {borrados_eventos} eventos y {borrados_entradas} entradas borrados")
+    print(f"Mongo: {borrados_eventos} eventos y {borrados_entradas} entradas borrados")
 
     # --- Limpiar Redis ---
     # flushdb() borra todas las llaves de la base de datos de Redis que
@@ -48,7 +48,7 @@ if respuesta.strip().lower() == "s":
     cliente_redis.flushdb()
 
     # Confirmamos en la terminal.
-    print("✔ Redis: todas las preventas borradas")
+    print("Redis: todas las preventas borradas")
 
 else:
     # Si la persona no escribió "s", no se borra nada.
