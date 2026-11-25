@@ -39,6 +39,7 @@ from db import probar_conexiones
 # Importamos la logica de cada funcionalidad (cada una vive en su propio archivo).
 from f1_carga import cargar_eventos                            # F1 (Paz)
 from f2_abrir_preventa import obtener_catalogo, abrir_preventa as abrir_preventa_redis  # F2 (Paz)
+from f4_obtener_entrada import  obtenerPreventasAbiertas , obtenerEntrada as obtener_entrada_bd  # F4 (Angel)
 # Nota: a la funcion de F2 le ponemos otro nombre ("abrir_preventa_redis")
 # para que no se confunda con la ruta abrir_preventa() de mas abajo.
 
@@ -179,23 +180,52 @@ def abrir_preventa():
 
 
 # F4 - Obtener una entrada (dueno: Angel)
-@app.route("/obtener-entrada")       # direccion: http://localhost:5000/obtener-entrada
-def obtener_entrada():
+@app.route("/obtenerEntrada")       # direccion: http://localhost:5000/obtener-entrada
+def obtenerEntrada():
     """
-    QUe HACE (F4):
-        Permitira que un cliente obtenga una entrada de una preventa.
+    QUE HACE (F4):
+        Muestra el formulario donde el cliente escribe su nombre y escoge
+        una preventa abierta; al enviarlo, le entrega una entrada.
     ENTRADAS:
-        (Pendiente) nombre del cliente y evento escogido.
+        GET:  opcionalmente "cliente" en la direccion (para dejar el nombre escrito).
+        POST: los campos del formulario "cliente" y "evento".
     SALIDAS:
-        Por ahora, la pagina "pendiente".
+        GET:  la pagina obtener_entrada.html con la lista "preventas"
+              (id, nombre y categoria) y el nombre del "cliente".
+        POST: vuelve a /obtenerEntrada con un mensaje de exito (con el
+              codigo de la entrada) o de error.
     RESTRICCIONES:
-        - Descuenta una entrada en Redis y guarda la entrada en MongoDB
-          (codigo, cliente, evento, categoria, fecha y hora).
-        - Error claro si: la preventa vencio, no quedan entradas o el
-          cliente ya tiene entrada de ese evento.
+        - Las validaciones (preventa vencida, cliente que ya tiene entrada,
+          sin entradas disponibles) las hace f4_obtener_entrada.py.
+        - Descuenta una entrada en Redis y guarda la entrada en MongoDB.
     """
-    return render_template("pendiente.html", titulo="Obtener una entrada")
+    # Si la persona envio el formulario...
+    if request.method == "POST":
+        cliente = request.form.get("cliente", "")
+        try:
+            # Intentamos entregar la entrada (descuenta en Redis y guarda en Mongo).
+            datos = obtener_entrada_bd(cliente, request.form.get("evento"))
+            # Mensaje verde con el codigo y las entradas que le quedan a la preventa.
+            flash(
+                f"Entrada obtenida: {datos['cliente']} recibio el codigo {datos['codigo']} "
+                f"para {datos['nombre']} ({datos['categoria']}). "
+                f"A la preventa le quedan {datos['disponibles']} entradas disponibles.",
+                "exito",
+            )
+        except ValueError as error:
+            # Preventa vencida, cliente repetido, sin entradas, etc.: mensaje en rojo.
+            flash(str(error), "error")
 
+        # Volvemos con GET (igual que en F1 y F2), dejando el nombre escrito.
+        return redirect(url_for("obtenerEntrada", cliente=cliente.strip()))
+
+    # Si solo entro a la pagina (GET), traemos las preventas abiertas y la mostramos.
+    preventas = obtenerPreventasAbiertas()
+    return render_template(
+        "obtener_entrada.html",
+        preventas=preventas,
+        cliente=request.args.get("cliente", ""),
+    )
 
 # F5 - Consultar entradas por categoria (duena: Rachel)
 @app.route("/consulta")              # direccion: http://localhost:5000/consulta
