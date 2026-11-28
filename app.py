@@ -34,7 +34,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 # Importamos nuestra funcion de db.py que revisa si Mongo y Redis responden.
+# os nos deja leer variables del sistema (se usa al final, al encender la app).
+import os
+
 from db import probar_conexiones
+
+# Funcion que vacia Mongo y Redis (al iniciar y al cerrar el programa).
+from limpiar_bd import limpiar_bases
 
 # Importamos la logica de cada funcionalidad (cada una vive en su propio archivo).
 from f1_carga import cargar_eventos                            # F1 (Paz)
@@ -289,8 +295,31 @@ def consultar_entradas():
 if __name__ == "__main__":
     # Antes de encender, revisamos en la terminal si Mongo y Redis responden.
     probar_conexiones()
-    # Encendemos el servidor web.
-    # debug=True hace dos cosas útiles mientras programamos:
-    #   - Si cambiamos el codigo y guardamos, la app se reinicia sola.
-    #   - Si hay un error, lo muestra con detalle en el navegador.
-    app.run(debug=True)
+
+    # ¿Este es el proceso PRINCIPAL o un reinicio automatico del modo debug?
+    # En modo debug, al guardar un archivo la app se reinicia sola y vuelve a
+    # ejecutar este bloque. Flask marca esos reinicios poniendo la variable
+    # WERKZEUG_RUN_MAIN en "true". Solo limpiamos en el proceso principal,
+    # para NO borrar la base cada vez que se guarda un archivo.
+    es_proceso_principal = os.environ.get("WERKZEUG_RUN_MAIN") != "true"
+
+    # LIMPIEZA AL INICIAR: por si la vez anterior el programa no se cerro bien
+    # (por ejemplo, si se cerro VS Code o la terminal con la X).
+    if es_proceso_principal:
+        limpiar_bases()
+
+    try:
+        # Encendemos el servidor web. La app se queda corriendo aqui
+        # hasta que se cierre con Ctrl+C en la terminal.
+        # debug=True hace dos cosas utiles mientras programamos:
+        #   - Si cambiamos el codigo y guardamos, la app se reinicia sola.
+        #   - Si hay un error, lo muestra con detalle en el navegador.
+        app.run(debug=True)
+    finally:
+        # LIMPIEZA AL CERRAR: "finally" se ejecuta SIEMPRE que app.run()
+        # termina, por ejemplo al presionar Ctrl+C en la terminal de VS Code.
+        # OJO: no se ejecuta si el programa se mata a la fuerza (cerrar la
+        # terminal con la X o apagar la compu); para eso esta la limpieza al iniciar.
+        if es_proceso_principal:
+            print("\nCerrando el programa...")
+            limpiar_bases()
