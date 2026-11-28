@@ -1,0 +1,46 @@
+<!--
+=====================================================================
+consulta.html  —  F5 CONSULTAR ENTRADAS (Rachel)
+---------------------------------------------------------------------
+Muestra una tabla con una fila por categoría: el total de entradas
+obtenidas y cuántos clientes DISTINTOS las obtuvieron.
+
+ENTRADAS:  "filas" -> lista enviada desde app.py; cada fila tiene
+           categoria, total_entradas y clientes_distintos.
+SALIDAS:   una tabla (nunca JSON, lo prohíbe el enunciado).
+RESTRICCIONES:
+  - Un cliente con entradas de varios eventos de la misma categoría
+    cuenta una sola vez en "# Clientes distintos".
+  - Las categorías sin entradas aparecen con 0.
+=====================================================================
+-->
+{% extends "base.html" %}                       <!-- Usamos el molde base.html -->
+
+{% block titulo %}Consultar entradas{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Consultar entradas</h1>                  <!-- Título de la página -->
+    <p>Entradas obtenidas en las preventas, agrupadas por categoría.</p>
+
+    {% if filas %}                               <!-- Si hay categorías para mostrar... -->
+        <table>
+            <tr>
+                <th>Categoría</th>
+                <th>Total entradas obtenidas</th>
+                <th># Clientes distintos</th>
+            </tr>
+            {% for f in filas %}                 <!-- Una fila por categoría -->
+            <tr>
+                <td>{{ f.categoria }}</td>
+                <td>{{ f.total_entradas }}</td>
+                <td>{{ f.clientes_distintos }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}                                   <!-- Si no hay categorías (catálogo vacío)... -->
+        <p class="vacio">
+            No hay datos para mostrar. Primero haga la
+            <a href="{{ url_for('carga_inicial') }}">carga inicial de datos</a>.
+        </p>
+    {% endif %}
+{% endblock %}
