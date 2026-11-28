@@ -12,6 +12,8 @@ ENTRADAS:  "preventas" -> lista enviada desde app.py; cada una con
 SALIDAS:   envía "cliente" y "evento" a /obtener-entrada (POST).
 RESTRICCIONES:
   - Si no hay preventas abiertas, se muestra un aviso en vez del formulario.
+  - La tabla de arriba muestra, por cada preventa abierta, las entradas
+    disponibles y el tiempo restante (vienen de Redis, ver F3).
   - Las validaciones (preventa vencida, cliente repetido, sin entradas)
     las hace f4_obtener_entrada.py; aquí solo se muestran sus mensajes.
 =====================================================================
@@ -24,6 +26,27 @@ RESTRICCIONES:
     <h1>Obtener una entrada</h1>                <!-- Título de la página -->
 
     {% if preventas %}                          <!-- Si hay preventas abiertas... -->
+        <!-- Tabla con las preventas abiertas: entradas disponibles y tiempo que les queda (datos de Redis) -->
+        <h2>Preventas disponibles</h2>
+        <table>
+            <tr>
+                <th>Evento</th>
+                <th>Categoría</th>
+                <th>Entradas disponibles</th>
+                <th>Tiempo restante</th>
+            </tr>
+            {% for p in preventas %}            <!-- Una fila por cada preventa -->
+            <tr>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.categoria }}</td>
+                <td>{{ p.disponibles }}</td>
+                <td>{{ p.tiempo_texto }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+
+        <h2>Escoja su entrada</h2>
         <!-- Formulario que envía los datos a la misma ruta con POST -->
         <form action="{{ url_for('obtener_entrada') }}" method="POST">
 

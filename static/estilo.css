@@ -208,10 +208,10 @@ body {
 /* Un color por categoría del archivo eventos.json.
    Si llega una categoría nueva, usa el gris de arriba. */
 .cat-conciertos   { background: #ede7f6; color: #4527a0; }  /* Morado */
-.cat-deportes     { background: #e8f5e9; color: #1b5e20; }  /* Verde */
+.cat-deportes     { background: #e8f5e9; color: #2c8f33; }  /* Verde */
 .cat-teatro       { background: #fdecea; color: #8e2a2a; }  /* Rojo */
 .cat-conferencias { background: #e3f2fd; color: #0d47a1; }  /* Azul */
-.cat-festivales   { background: #fff8e1; color: #7a5200; }  /* Amarillo */
+.cat-festivales   { background: #fff8e1; color: #7a5200; }  /* Amarillo */s
 
 /* Texto del tiempo restante */
 .tiempo {
