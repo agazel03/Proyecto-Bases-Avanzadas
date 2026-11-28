@@ -1,0 +1,50 @@
+<!--
+=====================================================================
+consulta.html  —  F5 CONSULTAR ENTRADAS POR CATEGORÍA (Rachel)
+---------------------------------------------------------------------
+Muestra una tabla con cada categoría, el total de entradas obtenidas
+en sus preventas y la cantidad de clientes distintos.
+
+ENTRADAS:  "filas" -> lista enviada desde app.py (de consultar_por_categoria);
+                      cada fila trae categoria, total_entradas y clientes_distintos.
+SALIDAS:   la tabla en pantalla.
+RESTRICCIONES:
+  - Los resultados se muestran en una tabla, nunca en JSON (lo exige el enunciado).
+  - Si el catálogo está vacío, se muestra un aviso en lugar de la tabla.
+=====================================================================
+-->
+{% extends "base.html" %}                        <!-- Usamos el molde base.html -->
+
+{% block titulo %}Consultar entradas{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Entradas por categoría</h1>               <!-- Título de la página -->
+
+    {% if filas %}                                <!-- Si hay categorías para mostrar... -->
+        <table>                                   <!-- Inicio de la tabla -->
+            <thead>                               <!-- Encabezado de la tabla -->
+                <tr>
+                    <th>Categoría</th>
+                    <th>Total entradas obtenidas</th>
+                    <th># Clientes distintos</th>
+                </tr>
+            </thead>
+            <tbody>                               <!-- Cuerpo de la tabla -->
+                {% for f in filas %}              <!-- Una fila por categoría -->
+                    <tr>
+                        <!-- Etiqueta de color de la categoría (mismos colores que la página principal) -->
+                        <td><span class="etiqueta cat-{{ f.categoria|lower }}">{{ f.categoria }}</span></td>
+                        <td>{{ f.total_entradas }}</td>        <!-- Total de entradas de esa categoría -->
+                        <td>{{ f.clientes_distintos }}</td>    <!-- Clientes distintos de esa categoría -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}                                    <!-- Si no hay categorías... -->
+        <!-- Aviso con enlace a la carga inicial (F1) -->
+        <p class="vacio">
+            Todavía no hay eventos. Primero haga la
+            <a href="{{ url_for('carga_inicial') }}">carga inicial de datos</a>.
+        </p>
+    {% endif %}
+{% endblock %}

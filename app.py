@@ -40,6 +40,8 @@ from db import probar_conexiones
 from f1_carga import cargar_eventos                            # F1 (Paz)
 from f2_abrir_preventa import obtener_catalogo, abrir_preventa as abrir_preventa_redis  # F2 (Paz)
 from f4_obtener_entrada import  obtenerPreventasAbiertas , obtenerEntrada as obtener_entrada_bd  # F4 (Angel)
+from f3_preventas_abiertas import obtener_preventas_abiertas   # F3 (Rachel)
+from f5_consulta_entradas import consultar_por_categoria       # F5 (Rachel)
 # Nota: a la funcion de F2 le ponemos otro nombre ("abrir_preventa_redis")
 # para que no se confunda con la ruta abrir_preventa() de mas abajo.
 
@@ -72,15 +74,15 @@ def preventas_abiertas():
         Ninguna (el usuario solo entra a http://localhost:5000/).
     SALIDAS:
         La pagina preventas.html con una lista "preventas"; cada preventa
-        trae: id, nombre, categoria, disponibles y minutos.
+        trae: id, nombre, categoria, disponibles, minutos y tiempo_texto.
     RESTRICCIONES:
         - Las entradas disponibles y el tiempo restante DEBEN leerse de
           Redis (lo exige el enunciado).
         - El nombre y la categoria se leen de MongoDB.
-        - PENDIENTE: por ahora devuelve una lista vacia.
+        - La logica esta en f3_preventas_abiertas.py.
     """
-    # Por ahora enviamos una lista vacia; Rachel la llenara con los datos de Redis y Mongo.
-    preventas = []
+    # Pedimos a F3 la lista de preventas vigentes (Redis + Mongo).
+    preventas = obtener_preventas_abiertas()
     # Mostramos preventas.html y le pasamos la lista de preventas.
     return render_template("preventas.html", preventas=preventas)
 
@@ -187,11 +189,14 @@ def obtener_entrada():
         Muestra el formulario donde el cliente escribe su nombre y escoge
         una preventa abierta; al enviarlo, le entrega una entrada.
     ENTRADAS:
-        GET:  opcionalmente "cliente" en la direccion (para dejar el nombre escrito).
+        GET:  opcionalmente "cliente" en la direccion (para dejar el nombre escrito)
+              y "evento" (para dejar seleccionada la preventa; lo envia el
+              boton "Obtener entrada" de cada tarjeta de la pagina principal).
         POST: los campos del formulario "cliente" y "evento".
     SALIDAS:
         GET:  la pagina obtener_entrada.html con la lista "preventas"
-              (id, nombre y categoria) y el nombre del "cliente".
+              (id, nombre y categoria), el nombre del "cliente" y el
+              "evento_seleccionado".
         POST: vuelve a /obtenerEntrada con un mensaje de exito (con el
               codigo de la entrada) o de error.
     RESTRICCIONES:
@@ -225,23 +230,31 @@ def obtener_entrada():
         "obtener_entrada.html",
         preventas=preventas,
         cliente=request.args.get("cliente", ""),
+        # Si se llego desde una tarjeta (/obtener-entrada?evento=E001),
+        # esa preventa aparece ya seleccionada en la lista.
+        evento_seleccionado=request.args.get("evento", ""),
     )
 
 # F5 - Consultar entradas por categoria (duena: Rachel)
 @app.route("/consulta")              # direccion: http://localhost:5000/consulta
 def consultar_entradas():
     """
-    QUe HACE (F5):
-        Mostrara, por categoria, el total de entradas y de clientes distintos.
+    QUE HACE (F5):
+        Muestra, por categoria, el total de entradas y de clientes distintos.
     ENTRADAS:
         Ninguna.
     SALIDAS:
-        Por ahora, la pagina "pendiente".
+        La pagina consulta.html con la lista "filas"; cada fila trae
+        categoria, total_entradas y clientes_distintos.
     RESTRICCIONES:
         - Un cliente con varias entradas en la misma categoria cuenta una sola vez.
         - Los resultados se ven en la interfaz, nunca en JSON.
+        - La logica (agregacion de MongoDB) esta en f5_consulta_entradas.py.
     """
-    return render_template("pendiente.html", titulo="Consultar entradas")
+    # Pedimos a F5 el resumen por categoria (agregacion en MongoDB).
+    filas = consultar_por_categoria()
+    # Mostramos la tabla en consulta.html.
+    return render_template("consulta.html", filas=filas)
 
 
 # ---------------------------------------------------------------------

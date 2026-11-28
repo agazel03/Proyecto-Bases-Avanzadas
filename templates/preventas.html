@@ -7,7 +7,8 @@ preventa vigente, con nombre del evento, categoría, entradas
 disponibles y tiempo restante (estos dos últimos vienen de Redis).
 
 Desde app.py se le debe enviar una lista llamada "preventas", donde
-cada preventa tiene: id, nombre, categoria, disponibles, minutos.
+cada preventa tiene: id, nombre, categoria, disponibles, minutos y tiempo_texto
+(los arma f3_preventas_abiertas.py).
 Mientras Rachel programa la lógica, la lista llega vacía y se muestra
 el mensaje de "no hay preventas abiertas".
 
@@ -34,9 +35,12 @@ RESTRICCIONES:
                     <span class="etiqueta cat-{{ p.categoria|lower }}">{{ p.categoria }}</span>
                     <h3>{{ p.nombre }}</h3>                                 <!-- Nombre del evento -->
                     <p>{{ p.disponibles }} entradas disponibles</p>         <!-- Dato de Redis -->
-                    <p class="tiempo">Vence en {{ p.minutos }} minutos</p>  <!-- Dato de Redis (TTL) -->
-                    <!-- Botón que lleva a obtener una entrada de este evento (F4) -->
-                    <a class="boton" href="{{ url_for('obtener_entrada') }}">Obtener entrada</a>
+                    <!-- Dato de Redis (TTL). tiempo_texto lo arma F3, ej. "12 min 30 s" -->
+                    <p class="tiempo">Vence en {{ p.tiempo_texto }}</p>
+                    <!-- Botón que lleva a obtener una entrada de ESTE evento (F4).
+                         url_for(..., evento=p.id) arma /obtener-entrada?evento=E001,
+                         así la preventa ya aparece seleccionada en el formulario. -->
+                    <a class="boton" href="{{ url_for('obtener_entrada', evento=p.id) }}">Obtener entrada</a>
                 </div>
             {% endfor %}                 <!-- Fin del recorrido -->
         </div>

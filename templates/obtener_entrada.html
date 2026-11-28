@@ -9,6 +9,8 @@ ENTRADAS:  "preventas" -> lista enviada desde app.py; cada una con
                           id, nombre y categoria (de obtenerPreventasAbiertas).
            "cliente"   -> nombre del cliente, para dejarlo escrito
                           después de enviar el formulario.
+           "evento_seleccionado" -> id de la preventa que debe aparecer ya
+                          escogida (cuando se llega desde una tarjeta).
 SALIDAS:   envía "cliente" y "evento" a /obtener-entrada (POST).
 RESTRICCIONES:
   - Si no hay preventas abiertas, se muestra un aviso en vez del formulario.
@@ -41,7 +43,10 @@ RESTRICCIONES:
                 <option value="">Seleccione una preventa</option>
                 {% for p in preventas %}                     <!-- Una opción por cada preventa -->
                     <!-- value = lo que se envía (el id); el texto es lo que ve el cliente -->
-                    <option value="{{ p.id }}">{{ p.nombre }} — {{ p.categoria }}</option>
+                    <!-- "selected" deja escogida la preventa si se llegó desde su tarjeta -->
+                    <option value="{{ p.id }}" {% if p.id == evento_seleccionado %}selected{% endif %}>
+                        {{ p.nombre }} — {{ p.categoria }}
+                    </option>
                 {% endfor %}
             </select>
 
