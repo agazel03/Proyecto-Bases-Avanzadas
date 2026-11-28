@@ -39,6 +39,7 @@ from db import probar_conexiones
 # Importamos la logica de cada funcionalidad (cada una vive en su propio archivo).
 from f1_carga import cargar_eventos                            # F1 (Paz)
 from f2_abrir_preventa import obtener_catalogo, abrir_preventa as abrir_preventa_redis  # F2 (Paz)
+from f3_preventas_abiertas import obtener_preventas_abiertas   # F3 (Rachel)
 from f4_obtener_entrada import  obtenerPreventasAbiertas , obtenerEntrada as obtener_entrada_bd  # F4 (Angel)
 # Nota: a la funcion de F2 le ponemos otro nombre ("abrir_preventa_redis")
 # para que no se confunda con la ruta abrir_preventa() de mas abajo.
@@ -52,6 +53,31 @@ app = Flask(__name__)
 # (por ejemplo "Datos cargados correctamente" o un mensaje de error).
 # Para un proyecto del curso basta con cualquier texto.
 app.secret_key = "proyecto1-bd-avanzadas"
+
+
+# ---------------------------------------------------------------------
+# PREVENTAS VIGENTES
+# Lee las preventas abiertas con la logica de F3 (Redis + Mongo).
+# La usan la pagina principal y la pagina de obtener entrada.
+# ---------------------------------------------------------------------
+def preventas_vigentes():
+    """
+    QUE HACE:
+        Devuelve la lista de preventas vigentes (la misma de F3).
+    ENTRADAS:
+        Ninguna.
+    SALIDAS:
+        Lista de diccionarios (id, nombre, categoria, disponibles,
+        minutos, tiempo_texto...). Si Redis o Mongo no responden,
+        devuelve [] para que la pagina no se rompa.
+    RESTRICCIONES:
+        Redis y Mongo deben estar encendidos.
+    """
+    try:
+        return obtener_preventas_abiertas()
+    except Exception as error:
+        print("No se pudieron leer las preventas:", error)
+        return []
 
 
 # ---------------------------------------------------------------------
@@ -77,10 +103,10 @@ def preventas_abiertas():
         - Las entradas disponibles y el tiempo restante DEBEN leerse de
           Redis (lo exige el enunciado).
         - El nombre y la categoria se leen de MongoDB.
-        - PENDIENTE: por ahora devuelve una lista vacia.
+        - Si Redis o Mongo estan apagados, se muestra la lista vacia.
     """
-    # Por ahora enviamos una lista vacia; Rachel la llenara con los datos de Redis y Mongo.
-    preventas = []
+    # La lista sale de f3_preventas_abiertas.py (Redis + Mongo).
+    preventas = preventas_vigentes()
     # Mostramos preventas.html y le pasamos la lista de preventas.
     return render_template("preventas.html", preventas=preventas)
 
@@ -220,7 +246,9 @@ def obtener_entrada():
         return redirect(url_for("obtener_entrada", cliente=cliente.strip()))
 
     # Si solo entro a la pagina (GET), traemos las preventas abiertas y la mostramos.
-    preventas = obtenerPreventasAbiertas()
+    # Usamos la lista de F3 porque trae ademas las entradas disponibles y el tiempo
+    # restante, que se muestran en la tabla de la pagina. Sigue incluyendo id, nombre y categoria.
+    preventas = preventas_vigentes()
     return render_template(
         "obtener_entrada.html",
         preventas=preventas,

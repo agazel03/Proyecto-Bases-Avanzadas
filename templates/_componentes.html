@@ -1,0 +1,25 @@
+<!--
+=====================================================================
+_componentes.html  —  PIEZAS REUTILIZABLES (macros)
+---------------------------------------------------------------------
+Un "macro" es como una función de Jinja: se escribe una vez y se usa
+en varias páginas. Aquí vive el ícono de cada categoría, para que el
+menú, las tarjetas y los formularios se vean igual en todos lados.
+
+ENTRADAS:  el nombre de la categoría (ej. "Conciertos").
+SALIDAS:   un emoji que representa la categoría.
+RESTRICCIONES:
+  - Si llega una categoría nueva (que no está en la lista), se usa 🎟️.
+  - Se importa al inicio de cada página (línea "from _componentes.html import icono") y se usa con icono(p.categoria).
+=====================================================================
+-->
+{% macro icono(categoria) -%}
+    {%- set iconos = {
+        "conciertos": "🎵",
+        "deportes": "🏟️",
+        "teatro": "🎭",
+        "conferencias": "🎤",
+        "festivales": "🎪"
+    } -%}
+    {{ iconos.get((categoria or "")|lower, "🎟️") }}
+{%- endmacro %}
