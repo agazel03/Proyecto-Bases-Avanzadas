@@ -1,0 +1,53 @@
+<!--
+=====================================================================
+obtener_entrada.html  —  F4 OBTENER UNA ENTRADA (Angel)
+---------------------------------------------------------------------
+El cliente escribe su nombre, escoge una de las preventas abiertas
+y obtiene una entrada.
+
+ENTRADAS:  "preventas" -> lista enviada desde app.py; cada una con
+                          id, nombre y categoria (de obtenerPreventasAbiertas).
+           "cliente"   -> nombre del cliente, para dejarlo escrito
+                          después de enviar el formulario.
+SALIDAS:   envía "cliente" y "evento" a /obtener-entrada (POST).
+RESTRICCIONES:
+  - Si no hay preventas abiertas, se muestra un aviso en vez del formulario.
+  - Las validaciones (preventa vencida, cliente repetido, sin entradas)
+    las hace f4_obtener_entrada.py; aquí solo se muestran sus mensajes.
+=====================================================================
+-->
+{% extends "base.html" %}                      <!-- Usamos el molde base.html -->
+
+{% block titulo %}Obtener entrada{% endblock %}  <!-- Título de la pestaña -->
+
+{% block contenido %}
+    <h1>Obtener una entrada</h1>                <!-- Título de la página -->
+
+    {% if preventas %}                          <!-- Si hay preventas abiertas... -->
+        <!-- Formulario que envía los datos a la misma ruta con POST -->
+        <form action="{{ url_for('obtener_entrada') }}" method="POST">
+
+            <label for="cliente">Nombre del cliente</label>   <!-- Texto del campo -->
+            <!-- Campo de texto para el nombre. name="cliente" es el nombre que lee Python.
+                 value="{{ cliente }}" deja escrito el nombre que se usó la vez anterior.
+                 maxlength="60" coincide con LARGO_MAXIMO_NOMBRE de f4_obtener_entrada.py -->
+            <input type="text" id="cliente" name="cliente" value="{{ cliente }}"
+                   maxlength="60" placeholder="Ana Mora" required>
+
+            <label for="evento">Preventa</label>             <!-- Texto del campo -->
+            <!-- Lista desplegable con las preventas abiertas. name="evento" es lo que lee Python. -->
+            <select id="evento" name="evento" required>
+                <!-- Primera opción vacía para obligar a escoger -->
+                <option value="">Seleccione una preventa</option>
+                {% for p in preventas %}                     <!-- Una opción por cada preventa -->
+                    <!-- value = lo que se envía (el id); el texto es lo que ve el cliente -->
+                    <option value="{{ p.id }}">{{ p.nombre }} — {{ p.categoria }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Obtener entrada</button>   <!-- Botón para enviar -->
+        </form>
+    {% else %}                                  <!-- Si no hay preventas abiertas... -->
+        <p class="vacio">No hay preventas abiertas en este momento.</p>
+    {% endif %}
+{% endblock %}

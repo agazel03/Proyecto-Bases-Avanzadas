@@ -217,7 +217,7 @@ def obtener_entrada():
             flash(str(error), "error")
 
         # Volvemos con GET (igual que en F1 y F2), dejando el nombre escrito.
-        return redirect(url_for("obtener_entradas", cliente=cliente.strip()))
+        return redirect(url_for("obtener_entrada", cliente=cliente.strip()))
 
     # Si solo entro a la pagina (GET), traemos las preventas abiertas y la mostramos.
     preventas = obtenerPreventasAbiertas()
