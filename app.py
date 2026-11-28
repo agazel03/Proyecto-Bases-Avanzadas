@@ -40,6 +40,7 @@ from db import probar_conexiones
 from f1_carga import cargar_eventos                            # F1 (Paz)
 from f2_abrir_preventa import obtener_catalogo, abrir_preventa as abrir_preventa_redis  # F2 (Paz)
 from f3_preventas_abiertas import obtener_preventas_abiertas   # F3 (Rachel)
+from f5_consulta_entradas import consultar_por_categoria      # F5 (Rachel)
 from f4_obtener_entrada import  obtenerPreventasAbiertas , obtenerEntrada as obtener_entrada_bd  # F4 (Angel)
 # Nota: a la funcion de F2 le ponemos otro nombre ("abrir_preventa_redis")
 # para que no se confunda con la ruta abrir_preventa() de mas abajo.
@@ -259,17 +260,26 @@ def obtener_entrada():
 @app.route("/consulta")              # direccion: http://localhost:5000/consulta
 def consultar_entradas():
     """
-    QUe HACE (F5):
-        Mostrara, por categoria, el total de entradas y de clientes distintos.
+    QUE HACE (F5):
+        Muestra, por categoria, el total de entradas obtenidas y la
+        cantidad de clientes distintos que las obtuvieron.
     ENTRADAS:
         Ninguna.
     SALIDAS:
-        Por ahora, la pagina "pendiente".
+        La pagina consulta.html con la lista "filas"; cada fila trae:
+        categoria, total_entradas y clientes_distintos.
     RESTRICCIONES:
         - Un cliente con varias entradas en la misma categoria cuenta una sola vez.
         - Los resultados se ven en la interfaz, nunca en JSON.
+        - Si Mongo esta apagado, se muestra un mensaje de error en vez de romper la pagina.
     """
-    return render_template("pendiente.html", titulo="Consultar entradas")
+    try:
+        # La logica (agregacion de MongoDB) esta en f5_consulta_entradas.py.
+        filas = consultar_por_categoria()
+    except Exception as error:
+        flash(f"No se pudo consultar las entradas: {error}", "error")
+        filas = []
+    return render_template("consulta.html", filas=filas)
 
 
 # ---------------------------------------------------------------------
